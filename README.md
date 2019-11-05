@@ -16,4 +16,4 @@ All you need is to run the `makefile`.
 - ncurses
 
 ## Copying
-This library is available to anybody free of charge, under the terms of GPL V.2 License.
+Available to anybody free of charge, under the terms of GPL V.2 License.
