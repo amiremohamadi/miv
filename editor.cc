@@ -4,6 +4,13 @@ Config Editor::config;
 
 Editor::Editor() : file() {
   initscr();
+
+  use_default_colors();
+  start_color();
+
+  // define color pairs
+  init_pair(BLACK_BLUE, COLOR_BLUE, -1);
+
   create_win(config.row_size, config.col_size, 0, 0);
   keypad(window, TRUE); // enable special keys (like arrow-keys)
 
@@ -69,14 +76,21 @@ void Editor::draw_rows() {
     wprintw(window, "~\n");
   }
 
+  // if no file was opened, print splash messages
   if (this->file.is_empty()) {
-    std::string splash_msg = "MIV -- @amiremohamadi";
-    mvwprintw(
-      window,
-      config.row_size / 2,
-      (config.col_size / 2) - (splash_msg.size() / 2),
-      splash_msg.c_str()
-    );
+    // messages is the array that is placed in defines.hh
+    
+    wattron(window, COLOR_PAIR(BLACK_BLUE));
+
+    // print the message, center of the screen
+    unsigned int i = 0;
+    for (std::string message : messages) {
+      mvwprintw(window, (config.row_size / 2) + i, 
+                (config.col_size / 2) - (message.size() / 2), message.c_str());
+      i++;
+    }
+
+    wattroff(window, COLOR_PAIR(BLACK_BLUE));
   }
 }
 
