@@ -30,9 +30,6 @@ void Editor::win_resize() {
 
   config.row_size = win.ws_row;
   config.col_size = win.ws_col;
-
-  delete_win();
-  create_win(config.row_size, config.col_size, 0, 0);
 }
 
 void Editor::move_cursor(wchar_t chr) {
