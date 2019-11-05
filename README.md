@@ -1,5 +1,7 @@
 <p align="center"><img src="imgs/Miv-Logo.png" width="300"></p>
 
+#### Currently under heavy development
+
 ## What is Miv?
 Miv is a **STUPID** text editor. The term **"Miv"** has no meaning and is just a play on words with **"Vim"**! 
 
