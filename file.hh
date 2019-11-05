@@ -10,6 +10,8 @@ class File {
   public:
     File();
     File(std::string);
+
+    bool is_empty();
 };
 
 #endif // FILE_HH_

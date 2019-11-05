@@ -68,6 +68,16 @@ void Editor::draw_rows() {
   for (int y = 0; y < config.row_size; y++) {
     wprintw(window, "~\n");
   }
+
+  if (this->file.is_empty()) {
+    std::string splash_msg = "MIV -- @amiremohamadi";
+    mvwprintw(
+      window,
+      config.row_size / 2,
+      (config.col_size / 2) - (splash_msg.size() / 2),
+      splash_msg.c_str()
+    );
+  }
 }
 
 void Editor::process_key() {
