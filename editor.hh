@@ -4,10 +4,12 @@
 #include <string>
 #include <ncurses.h>
 #include "config.hh"
+#include "file.hh"
 
 class Editor {
   private:
     WINDOW *window;
+    File file;
     static Config config;
     void create_win(int, int, int, int);
     void delete_win();

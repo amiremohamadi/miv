@@ -2,7 +2,7 @@
 
 Config Editor::config;
 
-Editor::Editor() {
+Editor::Editor() : file() {
   initscr();
   create_win(config.row_size, config.col_size, 0, 0);
   keypad(window, TRUE); // enable special keys (like arrow-keys)
