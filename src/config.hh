@@ -1,5 +1,5 @@
-#ifndef CONFIG_H_
-#define CONFIG_H_
+#ifndef CONFIG_HH_
+#define CONFIG_HH_
 
 #include <termios.h>
 #include <sys/ioctl.h>
@@ -25,4 +25,4 @@ struct Config {
   }
 };
 
-#endif // CONFIG_H_
+#endif // CONFIG_HH_
