@@ -59,6 +59,11 @@ void Editor::move_cursor(wchar_t chr) {
   }
 }
 
+void Editor::set_file(std::string file) {
+  this->file.set_file(file);
+  this->file.open();
+}
+
 void Editor::refresh_screen() {
   // reposition the cursor to write tildes
   wmove(window, 0, 0);
@@ -73,7 +78,12 @@ void Editor::refresh_screen() {
 
 void Editor::draw_rows() {
   for (int y = 0; y < config.row_size; y++) {
-    wprintw(window, "~\n");
+    if (y < this->file.size()) {
+      wprintw(window, this->file.get(y).c_str());
+      wprintw(window, "\n");
+    } else {
+      wprintw(window, "~\n");
+    }
   }
 
   // if no file was opened, print splash messages

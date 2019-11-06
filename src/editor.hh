@@ -1,5 +1,5 @@
-#ifndef EDITOR_H_
-#define EDITOR_H_
+#ifndef EDITOR_HH_
+#define EDITOR_HH_
 
 #include <string>
 #include <ncurses.h>
@@ -19,9 +19,11 @@ class Editor {
 
   public:
     Editor();
+
+    void set_file(std::string);
     void refresh_screen();
     void draw_rows();
     void process_key();
 };
 
-#endif // EDITOR_H_
+#endif // EDITOR_HH_
