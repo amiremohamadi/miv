@@ -1,5 +1,5 @@
 #ifndef DEFINES_HH_
-#define DEFINE_HH_
+#define DEFINES_HH_
 
 #include <iostream>
 #include <string>
@@ -29,4 +29,4 @@ enum ColorPairs {
     BLACK_RED,
 };
 
-#endif // DEFINES_H_
+#endif // DEFINES_HH_
