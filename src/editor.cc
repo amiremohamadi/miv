@@ -40,6 +40,8 @@ void Editor::_win_resize() {
 }
 
 void Editor::_move_cursor(wchar_t chr) {
+  size_t row_len = !file.is_empty() ? file.get(config.cursor_y).size() : 0;
+
   switch (chr) {
   case KEY_UP:
     config.cursor_y -= config.cursor_y > 0 ? 1 : 0;
@@ -50,13 +52,17 @@ void Editor::_move_cursor(wchar_t chr) {
     break;
 
   case KEY_RIGHT:
-    config.cursor_x += config.cursor_x < config.col_size-1 ? 1 : 0;
+    config.cursor_x += (config.cursor_x < row_len) ? 1 : 0;
     break;
   
   case KEY_LEFT:
     config.cursor_x -= config.cursor_x > 0 ? 1 : 0;
     break;
   }
+
+  // update row_len with new values
+  row_len = !file.is_empty() ? file.get(config.cursor_y).size() : 0;
+  if (config.cursor_x > row_len)  config.cursor_x = row_len;
 }
 
 void Editor::_scroll() {
