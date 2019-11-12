@@ -46,7 +46,7 @@ void Editor::_move_cursor(wchar_t chr) {
     break;
 
   case KEY_DOWN:
-    config.cursor_y += config.cursor_y < config.row_size-1 ? 1 : 0;
+    config.cursor_y += config.cursor_y < file.size()-1 ? 1 : 0;
     break;
 
   case KEY_RIGHT:
@@ -59,18 +59,27 @@ void Editor::_move_cursor(wchar_t chr) {
   }
 }
 
+void Editor::_scroll() {
+  if (config.cursor_y < config.row_offset)
+    config.row_offset = config.cursor_y;
+  if (config.cursor_y >= config.row_offset + config.row_size)
+    config.row_offset = config.cursor_y - config.row_size + 1;
+}
+
 void Editor::set_file(std::string file) {
   this->file.set_file(file);
   this->file.open();
 }
 
 void Editor::refresh_screen() {
+  _scroll();
+
   // reposition the cursor to write tildes
   wmove(window, 0, 0);
   draw_rows();
 
   // reset cursor position
-  wmove(window, config.cursor_y, config.cursor_x);
+  wmove(window, (config.cursor_y - config.row_offset), config.cursor_x);
   
   // show the cursor  
   wrefresh(window);
@@ -79,7 +88,7 @@ void Editor::refresh_screen() {
 void Editor::draw_rows() {
   for (int y = 0; y < config.row_size; y++) {
     if (y < this->file.size()) {
-      wprintw(window, this->file.get(y).c_str());
+      wprintw(window, this->file.get(y+config.row_offset).c_str());
       wprintw(window, "\n");
     } else {
       wprintw(window, "~\n");

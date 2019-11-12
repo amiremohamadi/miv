@@ -15,7 +15,7 @@ class Editor {
     void _delete_win();
     void _win_resize();
     void _move_cursor(wchar_t);
- 
+    void _scroll();
 
   public:
     Editor();
