@@ -11,10 +11,10 @@ class Editor {
     WINDOW *window;
     File file;
     static Config config;
-    void create_win(int, int, int, int);
-    void delete_win();
-    void win_resize();
-    void move_cursor(wchar_t);
+    void _create_win(int, int, int, int);
+    void _delete_win();
+    void _win_resize();
+    void _move_cursor(wchar_t);
  
 
   public:

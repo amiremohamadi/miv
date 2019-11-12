@@ -11,7 +11,7 @@ Editor::Editor() : file() {
   // define color pairs
   init_pair(BLACK_BLUE, COLOR_BLUE, -1);
 
-  create_win(config.row_size, config.col_size, 0, 0);
+  _create_win(config.row_size, config.col_size, 0, 0);
   keypad(window, TRUE); // enable special keys (like arrow-keys)
 
   noecho(); // no echo while getch()'ing!
@@ -23,15 +23,15 @@ Editor::Editor() : file() {
   });
 }
 
-void Editor::create_win(int row, int col, int begin_y, int begin_x) {
+void Editor::_create_win(int row, int col, int begin_y, int begin_x) {
   window = newwin(row, col, 0, 0);
 }
 
-void Editor::delete_win() {
+void Editor::_delete_win() {
   delwin(window);
 }
 
-void Editor::win_resize() {
+void Editor::_win_resize() {
   winsize win;
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);
 
@@ -39,7 +39,7 @@ void Editor::win_resize() {
   config.col_size = win.ws_col;
 }
 
-void Editor::move_cursor(wchar_t chr) {
+void Editor::_move_cursor(wchar_t chr) {
   switch (chr) {
   case KEY_UP:
     config.cursor_y -= config.cursor_y > 0 ? 1 : 0;
@@ -114,14 +114,14 @@ void Editor::process_key() {
 
   case KEY_RESIZE:
     // resize 
-    win_resize();
+    _win_resize();
     break;
 
   case KEY_UP:
   case KEY_DOWN:
   case KEY_LEFT:
   case KEY_RIGHT:
-    move_cursor(chr);
+    _move_cursor(chr);
     break;
   }
 }
