@@ -52,7 +52,7 @@ void Editor::_move_cursor(wchar_t chr) {
     break;
 
   case KEY_RIGHT:
-    config.cursor_x += (config.cursor_x < row_len) ? 1 : 0;
+    config.cursor_x += 1;
     break;
   
   case KEY_LEFT:
@@ -70,6 +70,10 @@ void Editor::_scroll() {
     config.row_offset = config.cursor_y;
   if (config.cursor_y >= config.row_offset + config.row_size)
     config.row_offset = config.cursor_y - config.row_size + 1;
+  if (config.cursor_x < config.col_offset)
+    config.col_offset = config.cursor_x;
+  if (config.cursor_x >= config.col_offset + config.col_size)
+    config.col_offset = config.cursor_x - config.col_size + 1;
 }
 
 void Editor::set_file(std::string file) {
@@ -85,7 +89,7 @@ void Editor::refresh_screen() {
   draw_rows();
 
   // reset cursor position
-  wmove(window, (config.cursor_y - config.row_offset), config.cursor_x);
+  wmove(window, (config.cursor_y - config.row_offset), (config.cursor_x - config.col_offset));
   
   // show the cursor  
   wrefresh(window);
@@ -94,7 +98,13 @@ void Editor::refresh_screen() {
 void Editor::draw_rows() {
   for (int y = 0; y < config.row_size; y++) {
     if (y < this->file.size()) {
-      wprintw(window, this->file.get(y+config.row_offset).c_str());
+      std::string this_line = file.get(y+config.row_offset);
+      
+      int len = this_line.length() - config.col_offset;
+      if (len < 0) len = 0;
+      if (len >= config.col_size) len = config.col_size-1; // TODO: remove this with some shitty tricks
+
+      if (len != 0) wprintw(window, this_line.substr(config.col_offset, len).c_str());
       wprintw(window, "\n");
     } else {
       wprintw(window, "~\n");
