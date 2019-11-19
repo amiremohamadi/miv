@@ -58,6 +58,16 @@ void Editor::_move_cursor(wchar_t chr) {
   case KEY_LEFT:
     config.cursor_x -= config.cursor_x > 0 ? 1 : 0;
     break;
+
+  case KEY_NPAGE:
+    config.cursor_y += config.cursor_y+config.row_size < file.size() ?
+      config.row_size-1 : (file.size()-config.cursor_y)-1;
+    break;
+
+  case KEY_PPAGE:
+    config.cursor_y -= config.cursor_y > config.row_size ?
+      config.row_size-1 : config.cursor_y;
+    break;
   }
 
   // update row_len with new values
@@ -146,6 +156,8 @@ void Editor::process_key() {
   case KEY_DOWN:
   case KEY_LEFT:
   case KEY_RIGHT:
+  case KEY_NPAGE:
+  case KEY_PPAGE:
     _move_cursor(chr);
     break;
   }
