@@ -6,6 +6,11 @@
 
 #define VERSION "0.0.1"
 
+#define CTRL_KEY_DOWN 531
+#define CTRL_KEY_UP 574
+#define CTRL_KEY_RIGHT 568
+#define CTRL_KEY_LEFT 553
+
 #define CTRL_KEY(key) (key & 0x1F) // 00011111 -> ctrl is pressed
 
 #define ERROR_HANDLER(msg) \
