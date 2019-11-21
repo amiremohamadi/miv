@@ -107,7 +107,7 @@ void Editor::refresh_screen() {
 
 void Editor::draw_rows() {
   for (int y = 0; y < config.row_size; y++) {
-    if (y < this->file.size()) {
+    if (y+config.row_offset < this->file.size()) {
       std::string this_line = file.get(y+config.row_offset);
       
       int len = this_line.length() - config.col_offset;
