@@ -3,6 +3,7 @@
 Config Editor::config;
 
 Editor::Editor() : file() {
+  setlocale(LC_CTYPE, ""); // UTF-8 support
   initscr();
 
   use_default_colors();
