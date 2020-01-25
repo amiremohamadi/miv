@@ -54,10 +54,12 @@ void Editor::_move_cursor(wchar_t chr) {
 
   case KEY_RIGHT:
     config.cursor_x += 1;
+    config.dummy_cursor_x = config.cursor_x;
     break;
   
   case KEY_LEFT:
     config.cursor_x -= config.cursor_x > 0 ? 1 : 0;
+    config.dummy_cursor_x = config.cursor_x;
     break;
 
   case KEY_NPAGE:
@@ -73,7 +75,15 @@ void Editor::_move_cursor(wchar_t chr) {
 
   // update row_len with new values
   row_len = !file.is_empty() ? file.get(config.cursor_y).size() : 0;
-  if (config.cursor_x > row_len)  config.cursor_x = row_len;
+  if (config.cursor_x > row_len) {
+    config.dummy_cursor_x = config.cursor_x;
+    config.cursor_x = row_len;
+  } else if (config.dummy_cursor_x <= row_len) {
+    // using dummy_cursor_x just for having better experience during
+    // scrolling! set cursor_x according to previous positions (like vim)
+    config.cursor_x = config.dummy_cursor_x;
+  }
+
 }
 
 void Editor::_scroll() {
