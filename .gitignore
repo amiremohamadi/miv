@@ -1,2 +1,3 @@
 miv
-*.out
+*\.out
+*\.vimconfig
