@@ -53,7 +53,7 @@ void Editor::_move_cursor(wchar_t chr) {
     break;
 
   case KEY_RIGHT:
-    config.cursor_x += 1;
+    config.cursor_x += config.cursor_x < row_len ? 1 : 0;
     config.dummy_cursor_x = config.cursor_x;
     break;
   
