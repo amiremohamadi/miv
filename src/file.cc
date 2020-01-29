@@ -21,7 +21,7 @@ void File::set_file(std::string file) {
   this->file = file;
 }
 
-std::string File::get(size_t indx) {
+std::string &File::get(size_t indx) {
   return this->lines[indx];
 }
 

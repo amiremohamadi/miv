@@ -23,6 +23,7 @@ class Editor {
     void set_file(std::string);
     void refresh_screen();
     void draw_rows();
+    void insert_char(wchar_t);
     void process_key();
 };
 
