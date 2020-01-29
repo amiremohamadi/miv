@@ -17,7 +17,7 @@ class File {
 
     void open();
     void set_file(std::string);
-    std::string get(size_t);
+    std::string &get(size_t);
     size_t size();
     bool is_empty();
 };
