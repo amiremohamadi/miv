@@ -153,6 +153,12 @@ void Editor::draw_rows() {
 void Editor::insert_char(wchar_t chr) {
   // TODO: needs refactor!
   // doesn't support utf-8 yet
+
+  // TODO: remove this condition
+  // just right now, we need this if-condition to prevent special chars like
+  // esc-chars and etc
+  if (chr < 'A' || chr > 'z') return;
+
   std::string _chr = std::string(1, chr);
   std::string &line = file.get(config.cursor_y);
 
@@ -182,6 +188,14 @@ void Editor::process_key() {
   case KEY_PPAGE:
     _move_cursor(chr);
     break;
+  case KEY_BACKSPACE:
+  case KEY_DC: // this is delete key
+  case CTRL_KEY('h'):
+    break;
+
+  case KEY_ESC:
+    break;
+
   default:
     insert_char(chr);
   }
