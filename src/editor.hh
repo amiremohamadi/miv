@@ -24,6 +24,7 @@ class Editor {
     void refresh_screen();
     void draw_rows();
     void insert_char(wchar_t);
+    void remove_char(bool);
     void process_key();
 };
 

@@ -162,6 +162,25 @@ void Editor::insert_char(wchar_t chr) {
   config.cursor_x++;
 }
 
+void Editor::remove_char(bool reversed = false) {
+    std::string &line = file.get(config.cursor_y);
+    // backspace can't remove char if cursor_x is at the beginning
+    // delete can't remove char if cursor_x is at the end
+    if ((config.cursor_x == 0 && reversed == false) ||
+            (config.cursor_x == line.size() && reversed == true)) return;
+
+    // seek to cursor_x position
+    std::string::iterator it = line.begin() + config.cursor_x;
+    
+    // backspace will remove the previous char
+    if (reversed == false) {
+      it--; // seek to previous position
+      config.cursor_x--; // change cursor position
+    }
+    
+    line.erase(it);
+}
+
 void Editor::process_key() {
   wchar_t chr = wgetch(window); // read key
 
@@ -186,9 +205,13 @@ void Editor::process_key() {
   case KEY_PPAGE:
     _move_cursor(chr);
     break;
+
   case KEY_BACKSPACE:
+    remove_char();
+    break;
+
   case KEY_DC: // this is delete key
-  case CTRL_KEY('h'):
+    remove_char(true); // reversed removation = true
     break;
 
   case KEY_ESC:
