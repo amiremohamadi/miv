@@ -10,6 +10,7 @@
 #define CTRL_KEY_UP 574
 #define CTRL_KEY_RIGHT 568
 #define CTRL_KEY_LEFT 553
+#define KEY_ESC '\x1b'
 
 #define CTRL_KEY(key) (key & 0x1F) // 00011111 -> ctrl is pressed
 
