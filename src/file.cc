@@ -13,8 +13,11 @@ void File::open() {
   std::ifstream input(file);
 
   std::string line;
-
   while (std::getline(input, line)) this->lines.push_back(line);
+
+  // when file is empty, this->lines is empty and it leads to occur a bug
+  // to prevent this, when a file is empty we append a dummy empty line to it 
+  if (this->lines.empty()) this->lines.push_back(""); 
 }
 
 void File::save() {
