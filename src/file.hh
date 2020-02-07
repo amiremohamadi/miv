@@ -16,6 +16,7 @@ class File {
     File(std::string);
 
     void open();
+    void save();
     void set_file(std::string);
     std::string &get(size_t);
     size_t size();

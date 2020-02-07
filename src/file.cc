@@ -17,6 +17,17 @@ void File::open() {
   while (std::getline(input, line)) this->lines.push_back(line);
 }
 
+void File::save() {
+    if (this->file.empty()) // in case no file is opened
+        return; // don't do anything
+    
+    std::ofstream output(file);
+    
+    for (std::string line : lines) {
+        output << line << '\n';
+    }
+}
+
 void File::set_file(std::string file) {
   this->file = file;
 }
