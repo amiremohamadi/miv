@@ -181,6 +181,13 @@ void Editor::remove_char(bool reversed = false) {
     line.erase(it);
 }
 
+void Editor::insert_newline() {
+  file.newline_after(config.cursor_y, config.cursor_x);
+  // change cursor positions (beginning of the next line)
+  config.cursor_y++;
+  config.cursor_x = 0;
+}
+
 void Editor::process_key() {
   wchar_t chr = wgetch(window); // read key
 
@@ -212,6 +219,10 @@ void Editor::process_key() {
 
   case KEY_DC: // this is delete key
     remove_char(true); // reversed removation = true
+    break;
+
+  case KEY_RETURN:
+    insert_newline();
     break;
 
   case KEY_ESC:

@@ -25,6 +25,7 @@ class Editor {
     void draw_rows();
     void insert_char(wchar_t);
     void remove_char(bool);
+    void insert_newline();
     void process_key();
 };
 
