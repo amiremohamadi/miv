@@ -35,6 +35,21 @@ void File::set_file(std::string file) {
   this->file = file;
 }
 
+void File::newline_after(size_t row, size_t col) {
+  std::string &line = this->get(row);
+  
+  // insert new line after row, col
+  // seek next to indx position
+  std::vector<std::string>::iterator row_it = this->lines.begin() + row + 1;
+  
+  // get the substring from col to the end of the line
+  std::string newline = line.substr(col);
+  line = line.substr(0, col);
+
+  // insert the new line
+  this->lines.insert(row_it, newline);
+}
+
 std::string &File::get(size_t indx) {
   return this->lines[indx];
 }

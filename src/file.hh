@@ -18,6 +18,7 @@ class File {
     void open();
     void save();
     void set_file(std::string);
+    void newline_after(size_t, size_t);
     std::string &get(size_t);
     size_t size();
     bool is_empty();
