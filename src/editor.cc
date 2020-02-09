@@ -163,22 +163,39 @@ void Editor::insert_char(wchar_t chr) {
 }
 
 void Editor::remove_char(bool reversed = false) {
-    std::string &line = file.get(config.cursor_y);
-    // backspace can't remove char if cursor_x is at the beginning
-    // delete can't remove char if cursor_x is at the end
-    if ((config.cursor_x == 0 && reversed == false) ||
-            (config.cursor_x == line.size() && reversed == true)) return;
+  std::string &line = file.get(config.cursor_y);
+  // backspace can't remove char if cursor_x is at the beginning
+  // delete can't remove char if cursor_x is at the end
+  if ((config.cursor_x == 0 && config.cursor_y == 0 && reversed == false) ||
+        (config.cursor_x == line.size() && config.cursor_y == file.size() - 1 &&
+        reversed == true)) return;
 
-    // seek to cursor_x position
-    std::string::iterator it = line.begin() + config.cursor_x;
+  // if cursor is at the beginning of the line and that's not the only line
+  // remove that
+  if (config.cursor_x == 0 && reversed == false) {
+    size_t x = file.jointo_prevline(config.cursor_y);
+    config.cursor_y--;
+    config.cursor_x = x; 
+    return;
+  }
+
+  // if cursor is at the end of a line and there's at least one more line after
+  // that, we must remove next line and append that to the current line
+  if (config.cursor_x == line.size() && reversed == true) {
+    file.jointo_nextline(config.cursor_y);
+    return;
+  }
+
+  // seek to cursor_x position
+  std::string::iterator it = line.begin() + config.cursor_x;
+
+  // backspace will remove the previous char
+  if (reversed == false) {
+    it--; // seek to previous position
+    config.cursor_x--; // change cursor position
+  }
     
-    // backspace will remove the previous char
-    if (reversed == false) {
-      it--; // seek to previous position
-      config.cursor_x--; // change cursor position
-    }
-    
-    line.erase(it);
+  line.erase(it);
 }
 
 void Editor::insert_newline() {
@@ -229,7 +246,8 @@ void Editor::process_key() {
     break;
 
   default:
-    insert_char(chr);
+    // TODO: just for now!
+    if ((chr >= 'A' && chr <= 'z') || chr == ' ') insert_char(chr);
   }
 }
 
