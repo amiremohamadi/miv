@@ -50,6 +50,35 @@ void File::newline_after(size_t row, size_t col) {
   this->lines.insert(row_it, newline);
 }
 
+void File::jointo_nextline(size_t row) {
+  std::string &line = this->get(row);
+  std::string nextline = this->get(row + 1);
+
+  // append next line to the current one
+  line += nextline;
+
+  // seek to the next line to remove it
+  std::vector<std::string>::iterator it = this->lines.begin() + row + 1;
+  this->lines.erase(it);
+}
+
+size_t File::jointo_prevline(size_t row) {
+  std::string line = this->get(row);
+  std::string &prevline = this->get(row - 1);
+
+  // store prevline size and return it to update cursor_y
+  size_t ret = prevline.size();
+    
+  // append current line to the previous line
+  prevline += line;
+
+  // remove current line
+  std::vector<std::string>::iterator it = this->lines.begin() + row;
+  this->lines.erase(it);
+
+  return ret;
+}
+
 std::string &File::get(size_t indx) {
   return this->lines[indx];
 }
