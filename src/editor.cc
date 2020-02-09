@@ -215,6 +215,7 @@ void Editor::process_key() {
 
   case CTRL_KEY('s'):
     this->file.save();
+    break;
 
   case KEY_RESIZE:
     // resize 
@@ -228,8 +229,12 @@ void Editor::process_key() {
   case KEY_NPAGE:
   case KEY_PPAGE:
     _move_cursor(chr);
-    break;
+  }
 
+  // if no file is opened, other functionalities must not working
+  if (this->file.is_empty()) return;
+
+  switch(chr) {
   case KEY_BACKSPACE:
     remove_char();
     break;
