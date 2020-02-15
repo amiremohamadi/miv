@@ -250,9 +250,9 @@ void Editor::process_key() {
   case KEY_ESC:
     break;
 
-  default:
+  case 32 ... 177:
     // TODO: just for now!
-    if ((chr >= 'A' && chr <= 'z') || chr == ' ') insert_char(chr);
+    insert_char(chr);
   }
 }
 
