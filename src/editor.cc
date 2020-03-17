@@ -3,7 +3,7 @@
 Config Editor::config;
 
 Editor::Editor() : file() {
-  setlocale(LC_CTYPE, ""); // UTF-8 support
+  std::setlocale(LC_ALL, ""); // UTF-8 support
   initscr();
 
   use_default_colors();
@@ -16,21 +16,17 @@ Editor::Editor() : file() {
   keypad(window, TRUE); // enable special keys (like arrow-keys)
 
   noecho(); // no echo while getch()'ing!
-  raw(); // enable raw mode (line buffering desable)
+  raw();    // enable raw mode (line buffering desable)
 
   // restore terminal settings at exit
-  std::atexit([](){
-    endwin();
-  });
+  std::atexit([]() { endwin(); });
 }
 
 void Editor::_create_win(int row, int col, int begin_y, int begin_x) {
   window = newwin(row, col, 0, 0);
 }
 
-void Editor::_delete_win() {
-  delwin(window);
-}
+void Editor::_delete_win() { delwin(window); }
 
 void Editor::_win_resize() {
   winsize win;
@@ -49,27 +45,28 @@ void Editor::_move_cursor(wchar_t chr) {
     break;
 
   case KEY_DOWN:
-    config.cursor_y += config.cursor_y < file.size()-1 ? 1 : 0;
+    config.cursor_y += config.cursor_y < file.size() - 1 ? 1 : 0;
     break;
 
   case KEY_RIGHT:
     config.cursor_x += config.cursor_x < row_len ? 1 : 0;
     config.dummy_cursor_x = config.cursor_x;
     break;
-  
+
   case KEY_LEFT:
     config.cursor_x -= config.cursor_x > 0 ? 1 : 0;
     config.dummy_cursor_x = config.cursor_x;
     break;
 
   case KEY_NPAGE:
-    config.cursor_y += config.cursor_y+config.row_size < file.size() ?
-      config.row_size-1 : (file.size()-config.cursor_y)-1;
+    config.cursor_y += config.cursor_y + config.row_size < file.size()
+                           ? config.row_size - 1
+                           : (file.size() - config.cursor_y) - 1;
     break;
 
   case KEY_PPAGE:
-    config.cursor_y -= config.cursor_y > config.row_size ?
-      config.row_size-1 : config.cursor_y;
+    config.cursor_y -= config.cursor_y > config.row_size ? config.row_size - 1
+                                                         : config.cursor_y;
     break;
   }
 
@@ -83,7 +80,6 @@ void Editor::_move_cursor(wchar_t chr) {
     // scrolling! set cursor_x according to previous positions (like vim)
     config.cursor_x = config.dummy_cursor_x;
   }
-
 }
 
 void Editor::_scroll() {
@@ -110,38 +106,42 @@ void Editor::refresh_screen() {
   draw_rows();
 
   // reset cursor position
-  wmove(window, (config.cursor_y - config.row_offset), (config.cursor_x - config.col_offset));
-  
-  // show the cursor  
+  wmove(window, (config.cursor_y - config.row_offset),
+        (config.cursor_x - config.col_offset));
+
+  // show the cursor
   wrefresh(window);
 }
 
 void Editor::draw_rows() {
   for (int y = 0; y < config.row_size; y++) {
-    if (y+config.row_offset < this->file.size()) {
-      std::string this_line = file.get(y+config.row_offset);
-      
-      int len = this_line.length() - config.col_offset;
-      if (len < 0) len = 0;
-      if (len >= config.col_size) len = config.col_size-1; // TODO: remove this with some shitty tricks
+    if (y + config.row_offset < this->file.size()) {
+      std::wstring this_line = file.get(y + config.row_offset);
 
-      if (len != 0) wprintw(window, this_line.substr(config.col_offset, len).c_str());
-      wprintw(window, "\n");
+      int len = this_line.length() - config.col_offset;
+      if (len < 0)
+        len = 0;
+      if (len >= config.col_size)
+        len = config.col_size - 1; // TODO: remove this with some shitty tricks
+
+      if (len != 0)
+        waddwstr(window, this_line.substr(config.col_offset, len).c_str());
+      waddwstr(window, L"\n");
     } else {
-      wprintw(window, "~\n");
+      waddwstr(window, L"~\n");
     }
   }
 
   // if no file was opened, print splash messages
   if (this->file.is_empty()) {
     // messages is the array that is placed in defines.hh
-    
+
     wattron(window, COLOR_PAIR(BLACK_BLUE));
 
     // print the message, center of the screen
     unsigned int i = 0;
     for (std::string message : messages) {
-      mvwprintw(window, (config.row_size / 2) + i, 
+      mvwprintw(window, (config.row_size / 2) + i,
                 (config.col_size / 2) - (message.size() / 2), message.c_str());
       i++;
     }
@@ -154,8 +154,8 @@ void Editor::insert_char(wchar_t chr) {
   // TODO: needs refactor!
   // doesn't support utf-8 yet
 
-  std::string _chr = std::string(1, chr);
-  std::string &line = file.get(config.cursor_y);
+  std::wstring _chr = std::wstring(1, chr);
+  std::wstring &line = file.get(config.cursor_y);
 
   line.insert(config.cursor_x, _chr);
 
@@ -163,19 +163,20 @@ void Editor::insert_char(wchar_t chr) {
 }
 
 void Editor::remove_char(bool reversed = false) {
-  std::string &line = file.get(config.cursor_y);
+  std::wstring &line = file.get(config.cursor_y);
   // backspace can't remove char if cursor_x is at the beginning
   // delete can't remove char if cursor_x is at the end
   if ((config.cursor_x == 0 && config.cursor_y == 0 && reversed == false) ||
-        (config.cursor_x == line.size() && config.cursor_y == file.size() - 1 &&
-        reversed == true)) return;
+      (config.cursor_x == line.size() && config.cursor_y == file.size() - 1 &&
+       reversed == true))
+    return;
 
   // if cursor is at the beginning of the line and that's not the only line
   // remove that
   if (config.cursor_x == 0 && reversed == false) {
     size_t x = file.jointo_prevline(config.cursor_y);
     config.cursor_y--;
-    config.cursor_x = x; 
+    config.cursor_x = x;
     return;
   }
 
@@ -187,14 +188,14 @@ void Editor::remove_char(bool reversed = false) {
   }
 
   // seek to cursor_x position
-  std::string::iterator it = line.begin() + config.cursor_x;
+  std::wstring::iterator it = line.begin() + config.cursor_x;
 
   // backspace will remove the previous char
   if (reversed == false) {
-    it--; // seek to previous position
+    it--;              // seek to previous position
     config.cursor_x--; // change cursor position
   }
-    
+
   line.erase(it);
 }
 
@@ -206,9 +207,18 @@ void Editor::insert_newline() {
 }
 
 void Editor::process_key() {
-  wchar_t chr = wgetch(window); // read key
+  /* wchar_t chr = wgetch(window); // read key */
+  wint_t ichar;
+  wget_wch(window, &ichar);
+  wchar_t chr = (wchar_t)ichar;
 
-  switch(chr) {
+  std::wofstream out("out.dat", std::ios::binary);
+  out.imbue(std::locale("fa_IR"));
+
+  out << chr;
+  out.close();
+
+  switch (chr) {
   case CTRL_KEY('q'):
     // exit normally
     exit(0);
@@ -218,7 +228,7 @@ void Editor::process_key() {
     break;
 
   case KEY_RESIZE:
-    // resize 
+    // resize
     _win_resize();
     break;
 
@@ -232,14 +242,15 @@ void Editor::process_key() {
   }
 
   // if no file is opened, other functionalities must not working
-  if (this->file.is_empty()) return;
+  if (this->file.is_empty())
+    return;
 
-  switch(chr) {
+  switch (chr) {
   case KEY_BACKSPACE:
     remove_char();
     break;
 
-  case KEY_DC: // this is delete key
+  case KEY_DC:         // this is delete key
     remove_char(true); // reversed removation = true
     break;
 
@@ -250,9 +261,8 @@ void Editor::process_key() {
   case KEY_ESC:
     break;
 
-  case 32 ... 177:
+  default:
     // TODO: just for now!
     insert_char(chr);
   }
 }
-
