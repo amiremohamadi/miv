@@ -212,12 +212,6 @@ void Editor::process_key() {
   wget_wch(window, &ichar);
   wchar_t chr = (wchar_t)ichar;
 
-  std::wofstream out("out.dat", std::ios::binary);
-  out.imbue(std::locale("fa_IR"));
-
-  out << chr;
-  out.close();
-
   switch (chr) {
   case CTRL_KEY('q'):
     // exit normally
@@ -225,12 +219,12 @@ void Editor::process_key() {
 
   case CTRL_KEY('s'):
     this->file.save();
-    break;
+    return;
 
   case KEY_RESIZE:
     // resize
     _win_resize();
-    break;
+    return;
 
   case KEY_UP:
   case KEY_DOWN:
@@ -239,6 +233,7 @@ void Editor::process_key() {
   case KEY_NPAGE:
   case KEY_PPAGE:
     _move_cursor(chr);
+    return;
   }
 
   // if no file is opened, other functionalities must not working
@@ -248,18 +243,18 @@ void Editor::process_key() {
   switch (chr) {
   case KEY_BACKSPACE:
     remove_char();
-    break;
+    return;
 
   case KEY_DC:         // this is delete key
     remove_char(true); // reversed removation = true
-    break;
+    return;
 
   case KEY_RETURN:
     insert_newline();
-    break;
+    return;
 
   case KEY_ESC:
-    break;
+    return;
 
   default:
     // TODO: just for now!

@@ -28,6 +28,7 @@ void File::save() {
     return;               // don't do anything
 
   std::wofstream output(file);
+  output.imbue(std::locale("fa_IR"));
 
   for (std::wstring line : lines) {
     output << line << '\n';
