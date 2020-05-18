@@ -30,8 +30,8 @@
     exit(1);                                                                   \
   } while (false)
 
-static std::string messages[] = {"MIV -- easier than vim", "VERSION " VERSION,
-                                 "by @amiremohamadi"};
+static std::string messages[] = {"MIV -- super stupid text editor",
+                                 "VERSION " VERSION, "by @amiremohamadi"};
 
 // enum index for color pairs
 enum ColorPairs {
