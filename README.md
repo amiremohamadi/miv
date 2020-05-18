@@ -34,7 +34,7 @@ You can change default key bindings by editing `defines.hh` file, but default va
 | Arrow Keys    | Move The Cursor|
 | Pagedown/Pageup      | Move Up And Down|
 
-Don't forget, it's super stupid!
+**Don't forget, it's super stupid!**
 
 
 ## Requirements
