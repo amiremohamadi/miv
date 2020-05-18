@@ -213,11 +213,11 @@ void Editor::process_key() {
   wchar_t chr = (wchar_t)ichar;
 
   switch (chr) {
-  case CTRL_KEY('q'):
+  case CTRL_KEY(_KEY_QUIT):
     // exit normally
     exit(0);
 
-  case CTRL_KEY('s'):
+  case CTRL_KEY(_KEY_SAVE):
     this->file.save();
     return;
 
