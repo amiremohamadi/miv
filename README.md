@@ -3,6 +3,8 @@
 #### Currently under heavy development
 
 ## What is Miv?
+<p align="center"><img src="imgs/screen-shot.png" width="400"></p>
+
 Miv is a **STUPID** text editor. The term **"Miv"** has no meaning and is just a play on words with **"Vim"**! 
 
 > It has no superiority over other editors and only is developed for personal purposes! also it can be a good resource if you want to know how text editors work.
