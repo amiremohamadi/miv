@@ -19,6 +19,7 @@ private:
 
 public:
   Editor();
+  ~Editor();
 
   void set_file(std::string);
   void refresh_screen();

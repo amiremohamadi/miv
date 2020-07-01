@@ -22,6 +22,11 @@ Editor::Editor() : file() {
   std::atexit([]() { endwin(); });
 }
 
+Editor::~Editor() {
+  // free the resources to avoid memory leak
+  this->_delete_win();
+}
+
 void Editor::_create_win(int row, int col, int begin_y, int begin_x) {
   window = newwin(row, col, 0, 0);
 }
